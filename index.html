@@ -1,51 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local Data Storage</title>
-  <link rel="icon" type="image/x-icon" href="database.png">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembukuan Harian</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Local Data Backup</h1>
-    <form id="dataForm">
-      <label for="number">Number:</label>
-      <select id="number" required>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-      </select><br><br>
-
-      <label for="name">Name:</label>
-      <input type="text" id="name" readonly required><br><br>
-
-      <label for="deposit">Deposit:</label>
-      <div class="deposit-input">
-        <input type="number" id="deposit" required>
-        <button type="button" id="add2000">+2000</button>
-        <button type="button" id="add4000">+4000</button>
-        <button type="button" id="add6000">+6000</button>
-        <button type="button" id="add8000">+8000</button>
-        <button type="button" id="add10000">+10000</button>
-      </div><br><br>
-
-      <button type="submit">Add Data</button>
-    </form>
-
-    <div id="savedData">
-      <h2>History:</h2>
-      <ul id="dataList"></ul>
+    <div class="container">
+        <h2>Pembukuan Harian</h2>
+        <!--<div class="input-group">
+            <label for="tanggal">Tanggal:</label>
+            <input type="date" id="tanggal">
+        </div> -->
+        <div class="input-group">
+            <label for="unit">Unit:</label>
+            <input type="text" id="unit" placeholder="Masukkan unit">
+        </div>
+        <div class="input-group">
+            <label for="waktu">Waktu:</label>
+            <input type="text" id="waktu" placeholder="Masukkan waktu (contoh: 1 jam)">
+        </div>
+        <div class="input-group">
+            <label for="tambahan">Tambahan:</label>
+            <input type="text" id="tambahan" placeholder="Tambahan lain (contoh: Mie)">
+        </div>
+        <button onclick="tambahData()">Tambah</button>
+        
+        <div class="records">
+            <h3>Data Pembukuan</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Unit</th>
+                        <th>Waktu</th>
+                        <th>Tambahan</th>
+                    </tr>
+                </thead>
+                <tbody id="data-list">
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
