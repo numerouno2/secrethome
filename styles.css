@@ -87,3 +87,39 @@ button.buy-btn {
 button.buy-btn:hover {
     background: #218838;
 }
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .form-container {
+        flex-direction: column;
+    }
+
+    input {
+        width: 100%;
+    }
+
+    td, th {
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .buy-btn, .cancel-btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
