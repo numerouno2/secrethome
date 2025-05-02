@@ -1,51 +1,241 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembukuan</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secret HIHI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background-color: #ffe6eb;
+    }
+
+    /* Background hati dengan jarak 5px */
+    .heart-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg width='65' height='65' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='0' y='55' font-size='50'%3E%F0%9F%92%97%3C/text%3E%3C/svg%3E");
+      background-size: 65px 65px;
+      animation: moveHearts 30s linear infinite;
+      z-index: -1;
+      opacity: 0.2;
+    }
+
+    @keyframes moveHearts {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-50px, -50px); }
+    }
+
+    .envelope-container {
+      position: relative;
+      width: 300px;
+      height: 220px;
+    }
+
+    .envelope-box {
+      width: 100%;
+      height: 150px;
+      background: #e63946;
+      position: absolute;
+      bottom: 0;
+      border-radius: 0 0 10px 10px;
+      z-index: 1;
+    }
+
+    .flap-wrapper {
+      position: absolute;
+      width: 100%;
+      height: 0;
+      top: 70px;
+      overflow: visible;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+    }
+
+    .flap-lancip {
+      width: 0;
+      height: 0;
+      border-left: 150px solid transparent;
+      border-right: 150px solid transparent;
+      border-top: 75px solid #360307;
+      transform-origin: top center;
+      transition: transform 0.6s ease;
+    }
+
+    .flap-lancip.open {
+      transform: rotateX(180deg);
+    }
+
+    .heart {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5em;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .heart:hover {
+      transform: translateX(-50%) scale(1.2);
+    }
+
+    .letter {
+      position: absolute;
+      bottom: 30px;
+      left: 2%;
+      width: 80%;
+      max-height: 120px;
+      overflow-y: auto;
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
+      z-index: 0;
+    }
+
+    .letter.show {
+      opacity: 1;
+      transform: translateY(-70px);
+      z-index: 4;
+    }
+
+    .dear {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      margin-bottom: 10px;
+    }
+
+    .signature {
+      text-align: right;
+      font-style: italic;
+    }
+
+    .popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+    }
+
+    .popup-box {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .popup-text {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    }
+
+    .popup-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    background-color: #e63946;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+
+    .popup-button:hover {
+    background-color: #c62828;
+    }
+
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Pembukuan</h1>
-        
-        <div class="form-container">
-            <input type="text" id="unit" placeholder="Unit">
-            <input type="text" id="waktu" placeholder="Waktu">
-            <input type="text" id="tambahan" placeholder="Tambahan">
-            <button onclick="tambahData()">Tambah</button>
-        </div>
+  <!-- Latar belakang hati -->
+  <div class="heart-bg"></div>
 
-        <h2>Pembayaran</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Unit</th>
-                    <th>Waktu</th>
-                    <th>Tambahan</th>
-                    <th>Konfirmasi</th>
-                </tr>
-            </thead>
-            <tbody id="pembayaran-list"></tbody>
-        </table>
-
-        <h2>Pembukuan</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Unit</th>
-                    <th>Waktu</th>
-                    <th>Tambahan</th>
-                </tr>
-            </thead>
-            <tbody id="pembukuan-list"></tbody>
-        </table>
+  <div class="envelope-container">
+    <!-- Flap segitiga -->
+    <div class="flap-wrapper">
+      <div class="flap-lancip" id="flap"></div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Popup Notifikasi -->
+            <div class="popup-overlay" id="popup">
+                <div class="popup-box">
+                <div class="popup-text">It's you?</div>
+                <button class="popup-button" id="popup-btn">Iya, aku</button>
+                </div>
+            </div>
+
+    <!-- Kotak amplop -->
+    <div class="envelope-box"></div>
+    <!-- Tombol hati -->
+    <div class="heart" id="heart">❤️</div>
+    <!-- Isi surat -->
+    <div class="letter" id="letter">
+      <div class="dear">Dear Laura,</div>
+      <div class="message">
+        Hai…<br><br>
+        Kadang aku mikir, seandainya kamu bisa ngerasain sedikit aja apa yang aku rasain… mungkin kamu bakal ngerti kenapa aku masih di sini.<br><br>
+        Kamu pernah jadi arah saat aku hilang arah, pernah jadi tenang di saat aku berantakan. Dan mungkin… aku cuma kangen versi hidupku saat kamu masih ada di dalamnya.<br><br>
+        Bukan karena aku terjebak masa lalu, tapi karena rasanya belum ada yang bisa nyamain cara kamu bikin semuanya terasa utuh.<br><br>
+        Kita pernah punya sesuatu yang bukan cuma sekadar kenangan. Buat aku, itu rumah—yang sampai sekarang, belum benar-benar bisa kutinggalkan. Dan entah kenapa, bagian dari diri ini masih yakin… kalau hal seindah itu nggak mungkin datang dua kali dengan orang yang sama, kalau bukan karena ada alasan.<br><br>
+        Aku nggak tahu kamu sekarang bagaimana… tapi kalau suatu saat kamu ngerasa kehilangan arah, atau cuma butuh seseorang yang tahu cara mencintaimu tanpa syarat—aku di sini. Masih ingat, dan nggak pernah benar-benar pergi.<br><br>     
+      </div>
+      <div class="signature">— Dimas🙂</div>
+    </div>
+  </div>
+
+   <!-- Audio -->
+   <audio id="audio" autoplay>
+    <source src="lagu.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const heart = document.getElementById('heart');
+    const flap = document.getElementById('flap');
+    const letter = document.getElementById('letter');
+
+    heart.addEventListener('click', () => {
+      flap.classList.add('open');
+      setTimeout(() => {
+        letter.classList.add('show');
+      }, 600);
+    });
+
+    const popup = document.getElementById('popup');
+    const popupBtn = document.getElementById('popup-btn');
+
+    popupBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+    // Putar lagu setelah popup hilang
+    audio.play();
+    });
+
+  </script>
+  
 </body>
 </html>
